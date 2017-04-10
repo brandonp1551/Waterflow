@@ -13,11 +13,11 @@ public class Node {
 	private int y = 0;
 	
 	//How much water has accumulated
-	private int waterDepth;
+	private double waterDepth;
 	
 	//Elevation
-	private int elevation;
-	public static final int DEFAULT_DEPTH = 0;
+	private double elevation;
+	public static final double DEFAULT_DEPTH = 0;
 	
 	/**
 	 * Constructor which sets depth to DEFAULT_DEPTH
@@ -25,7 +25,7 @@ public class Node {
 	 * @param b The y coordinate
 	 * @param elev The elevation
 	 */
-	public Node(int a, int b, int elev){
+	public Node(int a, int b, double elev){
 		this (a, b, elev, DEFAULT_DEPTH);
 	}
 	
@@ -36,7 +36,7 @@ public class Node {
 	 * @param elev The elevation
 	 * @param deep The desired initial water level
 	 */
-	public Node(int a, int b, int elev, int deep){
+	public Node(int a, int b, double elev, double deep){
 		setX(a);
 		setY(b);
 		this.elevation = elev;
@@ -97,7 +97,7 @@ public class Node {
 	 * Sets the water depth to some level
 	 * @param depth The depth of water being set to
 	 */
-	public void setDepth(int depth){
+	public void setDepth(double depth){
 		this.waterDepth = depth; 
 	}
 	
@@ -105,7 +105,7 @@ public class Node {
 	 * Gets the depth of water at our Node
 	 * @return waterDepth The depth of water
 	 */
-	public int getDepth(){
+	public double getDepth(){
 		return waterDepth;
 	}
 	
@@ -113,7 +113,7 @@ public class Node {
 	 * Gets the elevation at our Node
 	 * @return elevation The elevation attribute of our Node
 	 */
-	public int getElevation(){
+	public double getElevation(){
 		return elevation;
 	}
 	
@@ -121,8 +121,8 @@ public class Node {
 	 * Gets the net level of the water and elevation
 	 * @return level The elevation plus water depth for our Node
 	 */
-	public int getLevel(){
-		int level = elevation + waterDepth;
+	public double getLevel(){
+		double level = elevation + waterDepth;
 		return level;
 	}
 }
