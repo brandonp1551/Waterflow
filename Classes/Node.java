@@ -2,12 +2,21 @@ package finalProject;
 
 import mazeRunner.Coordinate;
 
+/**
+ * A class to make x-y coordinate pairs with an associated elevation and water level
+ * Can return the level, equivalent to elevation - water level
+ * @author James P. McDowell
+ *
+ */
 public class Node {
 	private int x = 0;
 	private int y = 0;
+	
+	//How much water has accumulated
 	private int waterDepth;
+	
+	//Elevation
 	private int elevation;
-	private int level;
 	public static final int DEFAULT_DEPTH = 0;
 	
 	public Node(int a, int b, int elev){
@@ -17,9 +26,8 @@ public class Node {
 	public Node(int a, int b, int elev, int deep){
 		setX(a);
 		setY(b);
-		setElevation(elev);
+		this.elevation = elev;
 		setDepth(deep);
-		this.level = getDepth() - getElevation();
 	}
 	
 	@Override
@@ -61,15 +69,11 @@ public class Node {
 		return waterDepth;
 	}
 	
-	public void setElevation(int elevation){
-		this.elevation = elevation;
-	}
-	
 	public int getElevation(){
 		return elevation;
 	}
 	
 	public int getLevel(){
-		return level;
+		return elevation + waterDepth;
 	}
 }
