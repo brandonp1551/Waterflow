@@ -4,6 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+/**
+ * Tests the Node class's public methods and constructor
+ * @author James P. McDowell
+ *
+ */
 public class NodeTest {
 	
 	@Test
@@ -40,12 +45,8 @@ public class NodeTest {
 	@Test
 	public void testSetters(){
 		Node a = new Node(10, 5, 3, 2);
-		a.setX(1);
-		assertTrue(a.getX() == 1);
-		a.setY(5);
-		assertTrue(a.getY() == 5);
 		a.setDepth(20);
 		assertTrue(a.getDepth() == 20);
-		System.out.println(a.getLevel() == 23);
+		assertTrue(a.getLevel() == 23);
 	}
 }
