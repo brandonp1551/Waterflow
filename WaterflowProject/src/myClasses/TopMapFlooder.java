@@ -13,7 +13,7 @@ public class TopMapFlooder {
 		m.setStartNode(m.map[0][0]);
 		m.getStartNode().incrementLevel();
 		System.out.println(m.getStartNode().getLevel());
-		for (int i = 0; i < 1000; i++){
+		for (int i = 0; i < 10000; i++){
 			m.getLowestNeighbor(m.getCurrentNode());
 			m.getFirstLowest().incrementLevel();
 		}

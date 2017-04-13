@@ -144,15 +144,13 @@ public class TopographicalMap {
 	 * @return That lowest node
 	 */
 	public Node getFirstLowest(){
-		int n = submergedNodes.size()-1;
-		Node firstLowest = submergedNodes.lastElement();
-		while (firstLowest.getLevel() == submergedNodes.elementAt(n-1).getLevel()){
-			if (n>1){
-				n--;
-				break;
+		int n = submergedNodes.size() - 1;
+		double lastHeight = submergedNodes.lastElement().getLevel();
+		for (int i = n; i > 0; i--){
+			if (lastHeight != submergedNodes.elementAt(i-1).getLevel()){
+				return submergedNodes.elementAt(i);
 			}
-			firstLowest = submergedNodes.elementAt(n);
 		}
-		return firstLowest;
+		return submergedNodes.elementAt(0);
 	}
 }
