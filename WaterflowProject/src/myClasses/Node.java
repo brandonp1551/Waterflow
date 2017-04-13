@@ -62,7 +62,7 @@ package myClasses;
 		 */
 		@Override
 		public String toString(){
-			return "At location (" + getX() + "," + getY() + ") we have an elevation of " + getElevation()+" and a water depth of " + getDepth();
+			return "At location (" + getX() + "," + getY() + ") we have an elevation of " + getElevation()+" and a net level of " + getLevel();
 		}
 		
 		/**
@@ -122,5 +122,12 @@ package myClasses;
 		public double getLevel(){
 			double level = elevation + waterDepth;
 			return level;
+		}
+		
+		/**
+		 * Increments the water level
+		 */
+		public void incrementLevel(){
+			waterDepth++;
 		}
 	}
