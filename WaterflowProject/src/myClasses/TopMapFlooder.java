@@ -9,7 +9,7 @@ import java.io.IOException;
  */
 public class TopMapFlooder {
 	public static void main(String[] args) throws IOException{
-		TopographicalMap m = new TopographicalMap("C:\\Users\\JameyP\\Desktop\\Waterflow\\WaterflowProject\\src\\dataSets\\Mountain.csv");
+		TopographicalMap m = new TopographicalMap("C:/Users/tcj/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Eclipse/Waterflow/WaterflowProject/src/dataSets/Mountain.csv");
 		m.setStartNode(m.map[0][0]);
 		m.getStartNode().incrementLevel();
 		System.out.println(m.getStartNode().getLevel());
