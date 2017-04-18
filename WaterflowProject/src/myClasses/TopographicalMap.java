@@ -18,6 +18,8 @@ public class TopographicalMap {
 	private Stack<Node> submergedNodes = new Stack<>();
 	private Node startNode;
 	private Node currentNode;
+	private double minLevel = 1; //lowest level found in the map
+	private double maxLevel = 5; //highest level found in the map
 	
 	/**
 	 * Our constructur to initialize the map; needs work for unknown sizes
@@ -105,6 +107,20 @@ public class TopographicalMap {
 	}
 	
 	/**
+	 * @return the width of the map
+	 */
+	public int getWidth(){
+		return map.length;
+	}
+	
+	/**
+	 * @return the height of the map
+	 */
+	public int getHeight(){
+		return map[0].length;
+	}
+	
+	/**
 	 * Gets the stack of our submerged nodes
 	 * @return The stack
 	 */
@@ -136,6 +152,29 @@ public class TopographicalMap {
 	 */
 	public Node getCurrentNode(){
 		return currentNode;
+	}
+	
+	/**
+	 * @return returns the lowest level found in the map
+	 */
+	public double getMinLevel(){
+		return minLevel;
+	}
+	
+	/**
+	 * @return returns the highest level found in the map
+	 */
+	public double getMaxLevel(){
+		return maxLevel;
+	}
+	
+	/**
+	 * @param x x coordinate of node to return
+	 * @param y y coordinate of node to return
+	 * @return returns the node at specified coordinates
+	 */
+	public Node getNode(int x, int y){
+		return map[x][y];
 	}
 	
 	/**
