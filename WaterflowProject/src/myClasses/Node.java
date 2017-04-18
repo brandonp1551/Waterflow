@@ -108,6 +108,13 @@ package myClasses;
 		}
 		
 		/**
+		 * @return if the node is wet (ie the water depth is greater than 0) 
+		 */
+		public boolean isWet(){
+			return waterDepth > 0;
+		}
+		
+		/**
 		 * Gets the elevation at our Node
 		 * @return elevation The elevation attribute of our Node
 		 */
