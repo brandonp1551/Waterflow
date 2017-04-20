@@ -2,11 +2,6 @@ package myClasses;
 
 import java.awt.Color;
 import java.awt.Dimension;
-
-/**
- * this class creates the visual representation of the map, as well as handling any UI elements
- */
-
 import java.awt.EventQueue;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -20,9 +15,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+/**
+ * this class creates the visual representation of the map, as well as handling any UI elements
+ */
+
 public class GraphicalTopMap {
 	final static int COLORMIN = 100; //minimum value allowed for a color
 	final static int COLORMAX = 250; //maximum value allowed for a color
+	final static int COLORBITDEPTH = 255; //maximum value valid as a color parameter
 	static TopographicalMap m = null;
 	static int floodUnits = 250; //number of water units to flood
 	static int xCoord = 0; //x coordinate for starting flood
@@ -119,8 +119,7 @@ public class GraphicalTopMap {
 				//init local vars
 				int x = xCoord;
 				int y = yCoord;
-				int fUnits = floodUnits;
-				
+				int fUnits = floodUnits;	
 				try{
 					x = Integer.parseInt(xCoordField.getText());
 					y = Integer.parseInt(yCoordField.getText());
@@ -136,8 +135,9 @@ public class GraphicalTopMap {
 						alert("Input accepted. Starting flood.");
 						startFlood();
 					}
-				} catch(Exception NumberFormatException){
-					alert("Please enter integer values.");
+				}catch(Exception e){
+					alert(e + " | " + e.getStackTrace()[0] + " (" + e.getStackTrace()[0].getLineNumber() + ")");
+					//alert("Please enter integer values.");
 				}
 			}          
 	      });
@@ -178,6 +178,15 @@ public class GraphicalTopMap {
 	}
 	
 	/**
+	 * redraws a specific Node in the map panel
+	 * @param n the node to be found and redrawn
+	 */
+	public void redrawNode(Node n){
+		int x = n.getX();
+		int y = n.getY();
+	}
+	
+	/**
 	 * sets the flood location
 	 * @param x coordinate for flood start
 	 * @param y coordinate for flood start
@@ -191,7 +200,17 @@ public class GraphicalTopMap {
 	 * responsible for actually starting the flood simulation on map m
 	 */
 	private void startFlood(){
-		
+		Node firstLowest = null;
+		m.setStartNode(m.getNode(xCoord, yCoord));
+		m.getStartNode().incrementLevel();
+		for(int i = 0; i < floodUnits; i++){
+			m.getLowestNeighbor(m.getCurrentNode());
+			firstLowest = m.getFirstLowest();
+			firstLowest.incrementLevel();
+			//redrawNode(firstLowest);
+		}
+		redrawMap();
+		alert("Flood complete.");
 	}
 	
 	/**
@@ -218,10 +237,12 @@ public class GraphicalTopMap {
 	 * @return returns the color used to represent the passed Node
 	 */
 	public Color getColor(Node n){
-		int cVal = colorValue(n.getLevel(), m.getMinLevel(), m.getMaxLevel());
+		int cVal = 0;
 		if(n.isWet()){
+			cVal = colorValue(n.getDepth(),m.getMaxDepth(), m.getMinDepth()); //these values intentionally reversed -tcj
 			return new Color(0, 0, cVal);
 		}else{
+			cVal = colorValue(n.getLevel(), m.getMinLevel(), m.getMaxLevel());
 			return new Color(cVal, cVal, 0);
 		}
 	}
@@ -232,7 +253,12 @@ public class GraphicalTopMap {
 	  * @param max maximum for comparing level of color 
 	  * @param min minimum for comparing level of color
 	  */
-	private int colorValue(Double value, Double min, Double max){
-		return (int) /*convert answer to int before returning*/ (((value - min) * (COLORMAX - COLORMIN)) / (max - min)) + COLORMIN;
+	private int colorValue(Double val, Double min, Double max){
+		//return (int) /*convert answer to int before returning*/ (((value - min) * (COLORMAX - COLORMIN)) / (max - min)) + COLORMIN;
+		int cVal = (int) (((val - min) * (COLORMAX - COLORMIN)) / (max - min)) + COLORMIN;
+		cVal = cVal % COLORBITDEPTH;
+		cVal = Math.abs(cVal); //TODO shouldn't need this, the result of the formula should always be positive to begin with, are negative values being fed into this method?
+		System.out.println(cVal);
+		return cVal;
 	}
 }
