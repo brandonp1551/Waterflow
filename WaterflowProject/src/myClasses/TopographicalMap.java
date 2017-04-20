@@ -20,6 +20,8 @@ public class TopographicalMap {
 	private Node currentNode;
 	private double minLevel = 1; //lowest level found in the map
 	private double maxLevel = 5; //highest level found in the map
+	private double minDepth = 0; //shallowest body of water
+	private double maxDepth = 5; //deepest body of water
 	
 	/**
 	 * Our constructur to initialize the map; needs work for unknown sizes
@@ -166,6 +168,20 @@ public class TopographicalMap {
 	 */
 	public double getMaxLevel(){
 		return maxLevel;
+	}
+	
+	/**
+	 * @return returns the shallowest amount of water found in the map
+	 */
+	public double getMinDepth(){
+		return minDepth;
+	}
+	
+	/**
+	 * @return returns the deepest amount of water found in the map
+	 */
+	public double getMaxDepth(){
+		return maxDepth;
 	}
 	
 	/**
