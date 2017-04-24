@@ -40,8 +40,8 @@ public class GraphicalTopMap {
 	private JTextField yCoordField;
 	private JTextField floodUnitsField;
 	private JPanel mapPanel;
-	private int hgap = 5; //horizontal gap between map tiles
-	private int vgap = 5; //vertical gap between map tiles
+	private int hgap = 0; //horizontal gap between map tiles
+	private int vgap = 0; //vertical gap between map tiles
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //for getting screen width
 	private int panelMaxW = (int) screenSize.getWidth(); //max width for panels is screen width
 	private int panelMaxH = 50;
