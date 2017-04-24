@@ -1,9 +1,11 @@
 package myClasses;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.Stack;
 
 /**
@@ -29,22 +31,19 @@ public class TopographicalMap {
 	 * @throws IOException
 	 */
 	public TopographicalMap(String fname) throws IOException{
-		BufferedReader br = null;
-		String line = "";
-		String splitBy = ",";
+		Scanner sc = null;
 		try {
-			br = new BufferedReader(new FileReader(fname));
-			br.readLine();
-			while ((line = br.readLine()) != null) {
-				String[] data = line.split(splitBy);
-				int x = Integer.parseInt(data[0]);
-				int y = Integer.parseInt(data[1]);
-				double depth = Double.parseDouble(data[2]);
+			sc = new Scanner(new File(fname));
+			while ((sc.hasNext())) {
+				int[] data = new int[3];
+				int x = sc.nextInt();
+				int y = sc.nextInt();
+				int depth = sc.nextInt();
+				data[0] = x;
+				data[1] = y;
+				data[2] = depth;
 				if (data.length == 3){
-					map[x-1][y-1] = new Node(x-1, y-1, depth);
-				} else {
-					double waterLevel = Double.parseDouble(data[3]);
-					map[x-1][y-1] = new Node(x-1, y-1, depth, waterLevel);
+					map[x-1][y-1] = new Node(x, y, depth);
 				}
 				numPoints++;
 			}
@@ -53,12 +52,8 @@ public class TopographicalMap {
 		} catch (IOException e){
 			e.printStackTrace();
 		} finally {
-			if (br != null){
-				try {
-					br.close();
-				} catch (IOException e){
-					e.printStackTrace();
-				}
+			if (sc != null){
+				sc.close();
 			}
 		}
 	}

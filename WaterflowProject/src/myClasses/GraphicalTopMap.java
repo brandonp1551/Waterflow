@@ -224,7 +224,7 @@ public class GraphicalTopMap {
 	public static void main(String[] args){
 		EventQueue.invokeLater(() -> {
 			try{
-				m = new TopographicalMap("C:/Users/tcj/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Eclipse/Waterflow/WaterflowProject/src/dataSets/Mountain.csv");
+				m = new TopographicalMap("/Users/bpeeler/git/Waterflow/WaterflowProject/src/dataSets/Mountain.txt");
 			}catch (IOException e) { //file not found, etc
 				e.printStackTrace();
 			}
