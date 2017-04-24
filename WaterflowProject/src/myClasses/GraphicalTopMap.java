@@ -250,7 +250,7 @@ public class GraphicalTopMap {
 	public static void main(String[] args){
 		EventQueue.invokeLater(() -> {
 			try{
-				m = new TopographicalMap("C:/Users/tcj/git/Waterflow/WaterflowProject/src/dataSets/mountain.txt");
+				m = new TopographicalMap("src/dataSets/furmanMap.txt");
 			}catch (IOException e) { //file not found, etc
 				e.printStackTrace();
 			}

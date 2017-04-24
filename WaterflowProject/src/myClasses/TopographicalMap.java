@@ -15,15 +15,15 @@ import java.util.Stack;
  */
 public class TopographicalMap {
 	//TO DO: fix later
-	public Node[][] map = new Node[10][10];
+	public Node[][] map = new Node[121][219];
 	private int numPoints = 0;
 	private Stack<Node> submergedNodes = new Stack<>();
 	private Node startNode;
 	private Node currentNode;
-	private double minLevel = 1; //lowest level found in the map
-	private double maxLevel = 5; //highest level found in the map
-	private double minDepth = 0; //shallowest body of water
-	private double maxDepth = 5; //deepest body of water
+	private double minLevel = 3901; //lowest level found in the map
+	private double maxLevel = 6625; //highest level found in the map
+	private double minDepth = 3901; //shallowest body of water
+	private double maxDepth = 6625; //deepest body of water
 	
 	/**
 	 * Our constructur to initialize the map; needs work for unknown sizes
