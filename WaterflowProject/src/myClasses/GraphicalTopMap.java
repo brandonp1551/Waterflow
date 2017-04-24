@@ -14,6 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+import javax.swing.Timer;
 
 /**
  * this class creates the visual representation of the map, as well as handling any UI elements
@@ -43,6 +45,7 @@ public class GraphicalTopMap {
 	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //for getting screen width
 	private int panelMaxW = (int) screenSize.getWidth(); //max width for panels is screen width
 	private int panelMaxH = 50;
+	static int REFRESH_RATE = 250; //how often the map is redrawn in milliseconds
 	
 	/**
 	 * constructor
@@ -151,20 +154,29 @@ public class GraphicalTopMap {
 	public JPanel mapPanel(){
 		mapPanel = new JPanel();
 		mapPanel.setLayout(new GridLayout(m.getWidth(), m.getHeight(), hgap, vgap));
-		JPanel tmpPanel;
 		for(int x = 0; x < m.getWidth(); x++){
 			for (int y = 0; y < m.getHeight(); y++){
-				tmpPanel = new JPanel();
-				tmpPanel.setBackground(getColor(m.getNode(x, y)));
-				double nodeElevation = m.getNode(x, y).getLevel();
-				JLabel eLabel = new JLabel("E: " + nodeElevation);
-				tmpPanel.add(eLabel);
-				JLabel cLabel = new JLabel("(" + x + ", " + y + ")");
-				tmpPanel.add(cLabel);
-				mapPanel.add(tmpPanel);
+				mapPanel.add(createNode(x, y));
 			}
 		}
 		return mapPanel;
+	}
+	
+	/**
+	 * returns a correctly colored JPanel for the given x y map coordinates
+	 * @param x x coordinate of map
+	 * @param y y coordinate of map
+	 * @return colored and labeled JPanel
+	 */
+	public JPanel createNode(int x, int y){
+		JPanel tmpPanel = new JPanel();
+		tmpPanel.setBackground(getColor(m.getNode(x, y)));
+		double nodeElevation = m.getNode(x, y).getLevel();
+		JLabel eLabel = new JLabel("E: " + nodeElevation);
+		tmpPanel.add(eLabel);
+		JLabel cLabel = new JLabel("(" + x + ", " + y + ")");
+		tmpPanel.add(cLabel);
+		return tmpPanel;
 	}
 	
 	/**
@@ -172,7 +184,6 @@ public class GraphicalTopMap {
 	 */
 	public void redrawMap(){
 		displayPanel.remove(mapPanel);
-		displayPanel.revalidate();
 		displayPanel.repaint();
 		assembleGUI(mapPanel());
 	}
@@ -180,10 +191,16 @@ public class GraphicalTopMap {
 	/**
 	 * redraws a specific Node in the map panel
 	 * @param n the node to be found and redrawn
+	 * @throws InterruptedException 
 	 */
-	public void redrawNode(Node n){
+	public void redrawNode(Node n) throws InterruptedException{
 		int x = n.getX();
 		int y = n.getY();
+		JPanel tmpPanel = createNode(x, y);
+		mapPanel.add(tmpPanel, x * y); //TODO hillariously wrong
+		//displayPanel.revalidate();
+		//displayPanel.repaint();
+		
 	}
 	
 	/**
@@ -198,18 +215,27 @@ public class GraphicalTopMap {
 	
 	/**
 	 * responsible for actually starting the flood simulation on map m
+	 * @throws InterruptedException 
 	 */
-	private void startFlood(){
+	private void startFlood() throws InterruptedException{
 		Node firstLowest = null;
 		m.setStartNode(m.getNode(xCoord, yCoord));
 		m.getStartNode().incrementLevel();
+		ActionListener taskPerformer = new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				alert(System.currentTimeMillis()); //DELETEME this is just to indiacte that something is still happening
+				redrawMap();
+			}
+		};
+		new Timer(REFRESH_RATE, taskPerformer).start(); //redraws the map every REFRESH_RATE milliseconds
 		for(int i = 0; i < floodUnits; i++){
 			m.getLowestNeighbor(m.getCurrentNode());
 			firstLowest = m.getFirstLowest();
 			firstLowest.incrementLevel();
 			//redrawNode(firstLowest);
 		}
-		redrawMap();
+		
+		redrawMap(); //redraw one more time to make sure the last changes get drawn
 		alert("Flood complete.");
 	}
 	
@@ -224,7 +250,7 @@ public class GraphicalTopMap {
 	public static void main(String[] args){
 		EventQueue.invokeLater(() -> {
 			try{
-				m = new TopographicalMap("/Users/bpeeler/git/Waterflow/WaterflowProject/src/dataSets/Mountain.txt");
+				m = new TopographicalMap("C:/Users/tcj/git/Waterflow/WaterflowProject/src/dataSets/mountain.txt");
 			}catch (IOException e) { //file not found, etc
 				e.printStackTrace();
 			}
@@ -239,8 +265,9 @@ public class GraphicalTopMap {
 	public Color getColor(Node n){
 		int cVal = 0;
 		if(n.isWet()){
-			cVal = colorValue(n.getDepth(),m.getMaxDepth(), m.getMinDepth()); //these values intentionally reversed -tcj
-			return new Color(0, 0, cVal);
+			cVal = colorValue(n.getDepth(), m.getMinDepth(), m.getMaxDepth()); //these values intentionally reversed -tcj
+			//System.out.println("depth: " + n.getDepth() + " | val: " + cVal);
+			return new Color(0, 0, COLORMAX - cVal);
 		}else{
 			cVal = colorValue(n.getLevel(), m.getMinLevel(), m.getMaxLevel());
 			return new Color(cVal, cVal, 0);
@@ -258,7 +285,7 @@ public class GraphicalTopMap {
 		int cVal = (int) (((val - min) * (COLORMAX - COLORMIN)) / (max - min)) + COLORMIN;
 		cVal = cVal % COLORBITDEPTH;
 		cVal = Math.abs(cVal); //TODO shouldn't need this, the result of the formula should always be positive to begin with, are negative values being fed into this method?
-		System.out.println(cVal);
+		//System.out.println(cVal);
 		return cVal;
 	}
 }

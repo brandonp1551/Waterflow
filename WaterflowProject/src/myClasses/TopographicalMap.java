@@ -43,7 +43,7 @@ public class TopographicalMap {
 				data[1] = y;
 				data[2] = depth;
 				if (data.length == 3){
-					map[x-1][y-1] = new Node(x, y, depth);
+					map[x-1][y-1] = new Node(x-1, y-1, depth);
 				}
 				numPoints++;
 			}
